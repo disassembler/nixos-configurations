@@ -1,0 +1,4 @@
+parameters.nix
+hardware-configuration.nix
+*-private.nix
+result

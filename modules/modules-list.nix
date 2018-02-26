@@ -1,0 +1,13 @@
+[
+  ./attributes.nix
+  ./profiles/zsh.nix
+  ./profiles/etcd.nix
+  ./profiles/vim.nix
+  ./roles/base.nix
+  ./roles/work.nix
+  ./profiles/xapps.nix
+  ./profiles/passopolis.nix
+  ./profiles/passopolis/service.nix
+  ./profiles/prometheus-surfboard-exporter/service.nix
+  ./profiles/tmux
+]
