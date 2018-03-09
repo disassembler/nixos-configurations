@@ -94,4 +94,13 @@ in {
     };
     dependencies = [];
   };
+  "markdown_wiki" = buildVimPlugin {
+    name = "markdown_wiki";
+    src = fetchgit {
+      url = "https://github.com/mmai/vim-markdown-wiki";
+      rev = "aba50241ccf987bf0395b9a700f3dce894bf7a16";
+      sha256 = "15ykh6y1qzga2id065ixx3shl72q3w1g1i7dn34pzi4vhlwg8cns";
+    };
+    dependencies = [];
+  };
 }

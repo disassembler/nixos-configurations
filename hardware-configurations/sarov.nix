@@ -8,23 +8,31 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
   boot.kernelModules = [ "kvm-intel" "wl" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/69d530dc-6c52-452d-a9aa-27ffb626601c";
-      fsType = "xfs";
+    { device = "zroot/root/nixos";
+      fsType = "zfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/70D6-1701";
+    { device = "/dev/disk/by-uuid/67E3-17ED";
       fsType = "vfat";
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/fd5f2475-6bd5-476e-b064-58a951f5d736"; }
-    ];
+  fileSystems."/home" =
+    { device = "zroot/root/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/tmp" =
+    { device = "zroot/root/tmp";
+      fsType = "zfs";
+    };
+
+  swapDevices = [ ];
 
   nix.maxJobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = "powersave";

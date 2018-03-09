@@ -4,8 +4,11 @@
 
 [user]
   name = Samuel Leathers
-  email = disasm@gmail.com
-  signingkey = 013A52BB
+  email = samuel.leathers@iohk.io
+  signingkey = 9BCE91C969768E0F
+
+[commit]
+  gpgsign = true
 
 [github]
   user = disassembler

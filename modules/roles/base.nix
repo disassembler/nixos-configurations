@@ -58,6 +58,7 @@ with lib;
 
     environment.systemPackages = with pkgs; [
       git
+      gitAndTools.gitflow
       screen
       nix-repl # repl for the nix language
       wget

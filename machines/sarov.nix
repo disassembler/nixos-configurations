@@ -4,12 +4,17 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  #boot.supportedFilesystems = [ "zfs" ];
-  #boot.zfs.enableUnstable = true;
+  boot.extraModprobeConfig = ''
+    options resume=/dev/sda5
+    options snd-hda-intel model=mbp5
+    options hid_apple fnmode=2
+  '';
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.enableUnstable = true;
 
   networking = {
     hostName = parameters.machine;
-    #hostId = "8c7233f4";
+    hostId = parameters.hostId;
     nameservers = [ "127.0.0.1" ];
     networkmanager.enable = true;
     networkmanager.unmanaged = [ "interface-name:ve-*" ];
@@ -19,17 +24,32 @@
     nat = {
       enable = true;
       internalInterfaces = ["ve-+"];
-      externalInterface = "wlp2s0";
+      externalInterface = "wlp3s0";
     };
     firewall = {
       enable = true;
-      allowedUDPPorts = [ 53 ];
+      allowedUDPPorts = [ 53 4919 ];
+      allowedTCPPorts = [ 4444 8081 3478 3000 8080 ];
+    };
+    bridges = {
+      cbr0.interfaces = [ ];
+    };
+    interfaces = {
+      cbr0 = {
+        ipv4.addresses = [
+          {
+            address = "10.38.0.1";
+            prefixLength = 24;
+          }
+        ];
+      };
     };
   };
 
   security.pki.certificates = [ parameters.wedlake_ca_cert ];
 
   nix = {
+    useSandbox = true;
     binaryCaches = [ "https://hydra.iohk.io" ];
     binaryCachePublicKeys = [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
     nixPath = [ "nixpkgs=/home/sam/nixpkgs/custom" "nixos-config=/etc/nixos/configuration.nix" ];
@@ -37,6 +57,16 @@
 
   nixpkgs.config = {
     allowUnfree = true;
+    packageOverrides = super: let self = super.pkgs; in {
+      nixops = super.nixops.overrideDerivation (
+        old: {
+          patchPhase = ''
+            substituteInPlace nix/eval-machine-info.nix \
+                --replace 'system.nixosVersion' 'system.nixos.version'
+          '';
+        }
+  );
+    };
   };
   environment.systemPackages = with pkgs; [
     nixops
@@ -47,8 +77,12 @@
     chromium
     gnupg
     gnupg1compat
+    docker_compose
+    niff
+    androidsdk
+    tmate
     htop
-    i3
+    i3-gaps
     xlockmore
     i3status
     feh
@@ -58,14 +92,21 @@
     xsel
     keepassx2
     tcpdump
+    telnet
     xclip
     xpra
     p11_kit
     openconnect
     openconnect_gnutls
     gnutls
+    nix-prefetch-git
+    gitAndTools.gitflow
+    tig
     python27Packages.gnutls
     unzip
+    aws
+    awscli
+    aws_shell
     p7zip
     zip
     scrot
@@ -94,7 +135,9 @@
       #'';
       
     };
+    opengl.enable = true;
     opengl.extraPackages = [ pkgs.vaapiIntel ];
+    facetimehd.enable = true;
     bluetooth = {
       enable = true;
       extraConfig = ''
@@ -104,10 +147,11 @@
     };
   };
   fonts.enableFontDir = true;
-  #fonts.enableCoreFonts = true;
+  fonts.enableCoreFonts = true;
   fonts.enableGhostscriptFonts = true;
+  fonts.fontconfig.dpi=150;
   fonts.fonts = with pkgs; [
-    #corefonts
+    corefonts
     fira # monospaced
     powerline-fonts
     inconsolata
@@ -119,21 +163,57 @@
     terminus_font
     unifont # some international languages
   ];
+  programs.adb.enable = true;
+
+  powerManagement.enable = true;
 
   services = {
     offlineimap = {
       enable = true;
       path = [ pkgs.notmuch ];
     };
+    printing = {
+      enable = true;
+      #drivers = [ pkgs.hplip ];
+      browsing = true;
+    };
+    compton = {
+      enable = true;
+      shadowExclude = [''"_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"''];
+      extraOptions = ''
+      opacity-rule = [
+      "95:class_g = 'URxvt' && !_NET_WM_STATE@:32a",
+      "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"
+      ];
+      '';
+    };
     xserver = {
+      xautolock = {
+        enable = true;
+        time = 5;
+        locker = "${pkgs.xtrlock-pam}/bin/xtrlock-pam";
+        nowlocker = "${pkgs.xtrlock-pam}/bin/xtrlock-pam";
+        #killer = "${pkgs.systemd}/bin/systemctl suspend";
+        #killtime = 30;
+        extraOptions = [ "-detectsleep" ];
+      };
       videoDrivers = [ "intel" ];
-      multitouch.enable = true;
+      libinput = {
+        enable = true;
+        disableWhileTyping = true;
+      };
       autorun = true;
       enable = true;
       layout = "us";
-      windowManager.i3.enable = true;
-      windowManager.spectrwm.enable = true;
-      windowManager.i3.configFile = import ../i3config.nix { inherit config; inherit pkgs; inherit parameters; };
+      windowManager.i3 = {
+        enable = true;
+        extraSessionCommands = ''
+          ${pkgs.xlibs.xset}/bin/xset r rate 200 60 # set keyboard repeat
+          ${pkgs.feh} --bg-scale /home/sam/photos/20170503_183237.jpg
+        '';
+      };
+      windowManager.i3.package = pkgs.i3-gaps;
+      #windowManager.i3.configFile = import ../i3config.nix { inherit config; inherit pkgs; inherit parameters; };
       windowManager.default = "i3";
       displayManager.slim = {
         enable = true;
@@ -143,15 +223,6 @@
           sha256 = "8b587bd6a3621b0f0bc2d653be4e2c1947ac2d64443935af32384bf1312841d7";
         };
       };
-      synaptics.additionalOptions = ''
-        Option "VertScrollDelta" "-100"
-        Option "HorizScrollDelta" "-100"
-      '';
-      synaptics.enable = true;
-      synaptics.tapButtons = true;
-      synaptics.fingersMap = [ 0 0 0 ];
-      synaptics.buttonsMap = [ 1 3 2 ];
-      synaptics.twoFingerScroll = true;
     };
     dnsmasq = {
       enable = true;
@@ -180,9 +251,13 @@
       mountPoint = "/keybase";
     };
   };
-  virtualisation.docker.enable = true;
-  #virtualisation.docker.enableOnBoot = true;
-  virtualisation.docker.storageDriver = "zfs";
+  virtualisation.docker = {
+    enable = true;
+    storageDriver = "zfs";
+    #extraOptions = "--iptables=false --ip-masq=false -b cbr0";
+    #extraOptions = "--insecure-registry 10.80.0.49:5000";
+  };
+  virtualisation.libvirtd.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
   # Custom dotfiles for sam user

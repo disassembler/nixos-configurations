@@ -156,11 +156,11 @@
   };
 
   fonts.enableFontDir = true;
-  fonts.enableCoreFonts = true;
+  #fonts.enableCoreFonts = true;
   fonts.enableGhostscriptFonts = true;
   fonts.fontconfig.dpi=90;
   fonts.fonts = with pkgs; [
-    corefonts
+  #  corefonts
     fira # monospaced
     powerline-fonts
     inconsolata

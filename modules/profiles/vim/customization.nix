@@ -27,7 +27,7 @@ in
           "repeat"
           "nerdtree"
           "UltiSnips"
-          "vimwiki"
+          #"vimwiki"
           "vim-colorschemes"
           "vim-colors_atelier-schemes"
           "vim-lastplace"
@@ -40,6 +40,7 @@ in
           "haskell_vim"
           "vim-docbk"
           "vim-docbk-snippets"
+          "markdown_wiki"
         ];
       }
     ];
