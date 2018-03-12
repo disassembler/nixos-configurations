@@ -11,6 +11,7 @@
   '';
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.enableUnstable = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking = {
     hostName = parameters.machine;
@@ -50,7 +51,7 @@
 
   nix = {
     useSandbox = true;
-    binaryCaches = [ "https://hydra.iohk.io" ];
+    binaryCaches = [ "https://cache.nixos.org" "https://hydra.iohk.io" ];
     binaryCachePublicKeys = [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
     nixPath = [ "nixpkgs=/home/sam/nixpkgs/custom" "nixos-config=/etc/nixos/configuration.nix" ];
   };
