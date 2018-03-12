@@ -2,8 +2,15 @@
 
 {
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  #boot.loader.systemd-boot.enable = true;
+  boot.loader.grub = {
+    efiSupport = true;
+    gfxmodeEfi = "1024x768";
+    device = "nodev";
+    efiInstallAsRemovable = true;
+  };
+  #boot.loader.efi.canTouchEfiVariables = true;
+  boot.plymouth.enable = true;
   boot.extraModprobeConfig = ''
     options resume=/dev/sda5
     options snd-hda-intel model=mbp5

@@ -22,15 +22,15 @@
       fsType = "vfat";
     };
 
-  fileSystems."/home" =
-    { device = "zroot/root/home";
-      fsType = "zfs";
-    };
+  #fileSystems."/home" =
+  #  { device = "zroot/root/home";
+  #    fsType = "zfs";
+  #  };
 
-  fileSystems."/tmp" =
-    { device = "zroot/root/tmp";
-      fsType = "zfs";
-    };
+  #fileSystems."/tmp" =
+  #  { device = "zroot/root/tmp";
+  #    fsType = "zfs";
+  #  };
 
   swapDevices = [ ];
 
