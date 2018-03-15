@@ -13,7 +13,22 @@
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
   fileSystems."/" =
-    { device = "zroot/root/nixos";
+    { device = "zpool/root/nixos";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home" =
+    { device = "zpool/root/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/nix" =
+    { device = "zpool/root/nix";
+      fsType = "zfs";
+    };
+
+  fileSystems."/tmp" =
+    { device = "zpool/root/tmp";
       fsType = "zfs";
     };
 
@@ -22,18 +37,10 @@
       fsType = "vfat";
     };
 
-  #fileSystems."/home" =
-  #  { device = "zroot/root/home";
-  #    fsType = "zfs";
-  #  };
-
-  #fileSystems."/tmp" =
-  #  { device = "zroot/root/tmp";
-  #    fsType = "zfs";
-  #  };
-
-  swapDevices = [ ];
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/b11fbc30-bb6b-4dc1-bb69-144fb9e43217"; }
+    ];
 
   nix.maxJobs = lib.mkDefault 4;
-  powerManagement.cpuFreqGovernor = "powersave";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }

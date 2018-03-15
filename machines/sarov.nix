@@ -17,8 +17,10 @@
     options hid_apple fnmode=2
   '';
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.enableUnstable = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.initrd.luks.devices = [{
+    name = "linuxroot";
+    device = "/dev/disk/by-uuid/9a7fe0b1-0f54-40d3-8aae-e083f8859ebe";
+  }];
 
   networking = {
     hostName = parameters.machine;
@@ -206,10 +208,25 @@
         extraOptions = [ "-detectsleep" ];
       };
       videoDrivers = [ "intel" ];
-      libinput = {
-        enable = true;
-        disableWhileTyping = true;
-      };
+      #multitouch = {
+      #  enable = true;
+      #  invertScroll = false;
+      #  buttonsMap = [1 3 2];
+      #  ignorePalm = true;
+      #};
+      synaptics.additionalOptions = ''
+        Option "VertScrollDelta" "100"
+        Option "HorizScrollDelta" "100"
+      '';
+      synaptics.enable = true;
+      synaptics.tapButtons = true;
+      synaptics.fingersMap = [ 0 0 0 ];
+      synaptics.buttonsMap = [ 1 3 2 ];
+      synaptics.twoFingerScroll = true;
+      #libinput = {
+      #  enable = true;
+      #  disableWhileTyping = true;
+      #};
       autorun = true;
       enable = true;
       layout = "us";

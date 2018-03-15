@@ -67,6 +67,10 @@ autocmd Filetype php setlocal tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType ruby compiler ruby
 filetype plugin on    " Enable filetype-specific plugins
 
+" sshconfig
+au BufNewFile,BufRead ssh_config,*/.ssh/config,*/.ssh/config.d/*.conf	setf sshconfig
+
+
 " Those types
 if has("user_commands")
 command! -bang -nargs=? -complete=file E e<bang> <args>
