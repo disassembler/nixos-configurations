@@ -129,6 +129,7 @@
     notmuch
     pythonPackages.goobook
     taskwarrior
+    jq
 
   ];
 
