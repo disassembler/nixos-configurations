@@ -60,31 +60,61 @@
 
   nix = {
     useSandbox = true;
+    buildCores = 4;
     binaryCaches = [ "https://cache.nixos.org" "https://hydra.iohk.io" ];
     binaryCachePublicKeys = [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
     nixPath = [ "nixpkgs=/home/sam/nixpkgs/custom" "nixos-config=/etc/nixos/configuration.nix" ];
+    package = pkgs.nix';
   };
 
+  nixpkgs.overlays = [
+    (self: super: {
+      nix' = super.nix.overrideAttrs ( drv: {
+        patches = [
+          (pkgs.fetchpatch {
+             url = "https://github.com/NixOS/nix/commit/a6c5955c8d59ca26745843f9779253a173876665.patch";
+             name = "nsswitch.patch";
+             sha256 = "1kk2j9bnv3c4ck6c79mwmq04q1qzzq8jvxsi2csyswh9pvxdf1hv";
+           })
+
+        ];
+      });
+    })
+  ];
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = super: let self = super.pkgs; in {
       nixops = super.nixops.overrideDerivation (
-        old: {
-          patchPhase = ''
+      old: {
+        patchPhase = ''
             substituteInPlace nix/eval-machine-info.nix \
                 --replace 'system.nixosVersion' 'system.nixos.version'
-          '';
-        }
-  );
+        '';
+      }
+      );
+      manymans = with pkgs; buildEnv {
+        name = "manymans";
+        ignoreCollisions = true;
+        paths = [
+          man-pages posix_man_pages stdmanpages glibcInfo
+        ];
+      };
     };
   };
   environment.systemPackages = with pkgs; [
+    sqliteInteractive
+    manymans
+    hlint
+    dysnomia
+    disnix
+    disnixos
     nixops
     dropbox
     gist
     dropbox-cli
     dmenu
     chromium
+    #vimb
     gnupg
     gnupg1compat
     docker_compose
@@ -120,7 +150,7 @@
     p7zip
     zip
     scrot
-    remmina
+    #remmina
     tdesktop
     keybase
     keybase-gui
@@ -130,7 +160,7 @@
     pythonPackages.goobook
     taskwarrior
     jq
-
+    cabal2nix
   ];
 
   hardware = {
@@ -144,7 +174,7 @@
       #        load-module module-bluez5-device
       #        load-module module-bluez5-discover
       #'';
-      
+
     };
     opengl.enable = true;
     opengl.extraPackages = [ pkgs.vaapiIntel ];
@@ -179,23 +209,30 @@
   powerManagement.enable = true;
 
   services = {
+    #zfs.autoSnapshot.enable = true;
+    grafana_reporter = {
+      enable = true;
+      grafana = {
+        addr = "optina.wedlake.lan";
+      };
+    };
     offlineimap = {
       enable = true;
       path = [ pkgs.notmuch ];
     };
     printing = {
       enable = true;
-      #drivers = [ pkgs.hplip ];
+      drivers = [ pkgs.hplip ];
       browsing = true;
     };
     compton = {
       enable = true;
       shadowExclude = [''"_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"''];
       extraOptions = ''
-      opacity-rule = [
-      "95:class_g = 'URxvt' && !_NET_WM_STATE@:32a",
-      "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"
-      ];
+        opacity-rule = [
+        "95:class_g = 'URxvt' && !_NET_WM_STATE@:32a",
+        "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"
+        ];
       '';
     };
     xserver = {
@@ -269,6 +306,10 @@
           autoStart = false;
           config = parameters.prophet-openvpn-config;
         };
+        prophet-guest = {
+          autoStart = false;
+          config = parameters.prophet-guest-openvpn-config;
+        };
       };
     };
     keybase.enable = true;
@@ -284,6 +325,7 @@
     #extraOptions = "--insecure-registry 10.80.0.49:5000";
   };
   virtualisation.libvirtd.enable = true;
+  virtualisation.virtualbox.host.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
   # Custom dotfiles for sam user

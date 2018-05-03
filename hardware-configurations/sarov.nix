@@ -8,7 +8,7 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.kernelModules = [ "kvm-intel" "wl" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
@@ -17,13 +17,13 @@
       fsType = "zfs";
     };
 
-  fileSystems."/home" =
-    { device = "zpool/root/home";
+  fileSystems."/nix" =
+    { device = "zpool/root/nix";
       fsType = "zfs";
     };
 
-  fileSystems."/nix" =
-    { device = "zpool/root/nix";
+  fileSystems."/home" =
+    { device = "zpool/root/home";
       fsType = "zfs";
     };
 
@@ -35,6 +35,11 @@
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/67E3-17ED";
       fsType = "vfat";
+    };
+
+  fileSystems."/home/sam/state-cardano" =
+    { device = "zpool/root/state-cardano";
+      fsType = "zfs";
     };
 
   swapDevices =

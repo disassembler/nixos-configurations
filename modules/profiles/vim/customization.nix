@@ -38,10 +38,12 @@ in
           "vim_ps1"
           "haskell_vim"
           "vim-docbk"
+          "vim-hoogle"
           "vim-docbk-snippets"
           "markdown_wiki"
           "vim_stylish_haskell"
           "haskell_vim"
+          "tagbar"
         ];
       }
     ];
