@@ -23,7 +23,7 @@ in
           "ale"
           "gitgutter"
           "vim-nix"
-          #"youcompleteme"
+          "youcompleteme"
           "repeat"
           "nerdtree"
           "UltiSnips"

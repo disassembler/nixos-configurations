@@ -1,13 +1,19 @@
 { config, pkgs, lib, ... }:
 let
+  customization = (import ./vim/customization.nix { pkgs = pkgs; });
   nvim = pkgs.neovim.override {
     vimAlias = true;
-    configure = (import ./vim/customization.nix { pkgs = pkgs; });
+    configure = customization;
+  };
+  vim = pkgs.vim_configurable.customize { 
+    name = "vim";
+    vimrcConfig.vam = customization.vam;
+    vimrcConfig.customRC = customization.customRC;
   };
 in with lib; {
   config = {
     environment.systemPackages = [ 
-      nvim
+      vim
       pkgs.ctags
       #pkgs.python
       #pkgs.python35Packages.neovim
