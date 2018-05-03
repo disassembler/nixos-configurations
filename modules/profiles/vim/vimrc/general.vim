@@ -104,3 +104,5 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
                      \ 'syntax': 'markdown', 'ext': '.md'}]
 let g:ycm_server_keep_logfiles = 1
 let g:ycm_server_log_level = 'debug'
+
+autocmd Filetype haskell set foldmethod=indent foldcolumn=4

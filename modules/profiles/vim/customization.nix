@@ -20,14 +20,13 @@ in
           "surround"
           "vim-markdown"
           "multiple-cursors"
-          "syntastic"
+          "ale"
           "gitgutter"
           "vim-nix"
           #"youcompleteme"
           "repeat"
           "nerdtree"
           "UltiSnips"
-          #"vimwiki"
           "vim-colorschemes"
           "vim-colors_atelier-schemes"
           "vim-lastplace"
@@ -41,6 +40,8 @@ in
           "vim-docbk"
           "vim-docbk-snippets"
           "markdown_wiki"
+          "vim_stylish_haskell"
+          "haskell_vim"
         ];
       }
     ];

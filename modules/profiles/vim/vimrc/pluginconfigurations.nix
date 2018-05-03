@@ -1,9 +1,5 @@
-let
-    # some files
-    ycm = builtins.readFile ./plugins/ycm.vim;
-in
-
 ''
+    let g:ale_completion_enabled = 1
     " some variables
-    ${ycm}
+    let g:ycm_server_python_interpreter = ${pkgs.python}
 ''

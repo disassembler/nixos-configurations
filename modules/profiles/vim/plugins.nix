@@ -89,8 +89,8 @@ in {
     name = "haskell_vim";
     src = fetchgit {
       url = "https://github.com/neovimhaskell/haskell-vim";
-      rev = "430b529224c5f9ae53b148f814b7b1fc82b8b525";
-      sha256 = "15z259b9b3wbklc8rndsq2rlhgccvxhfgd76yy80jqjmfmzib8kg";
+      rev = "e027b314df128979dbd00dd94c9db080db156b5c";
+      sha256 = "13dx1ifwa444q8zkwda4qha74xjm4jfhhk9lbgbj9p1mj7gvbl7f";
     };
     dependencies = [];
   };
@@ -100,6 +100,24 @@ in {
       url = "https://github.com/mmai/vim-markdown-wiki";
       rev = "aba50241ccf987bf0395b9a700f3dce894bf7a16";
       sha256 = "15ykh6y1qzga2id065ixx3shl72q3w1g1i7dn34pzi4vhlwg8cns";
+    };
+    dependencies = [];
+  };
+  "ale" = buildVimPlugin {
+    name = "ale";
+    src = fetchgit {
+      url = "https://github.com/w0rp/ale";
+      rev = "164c711b3da5a51a2323a3bd613df251ce455ca5";
+      sha256 = "135xb70cyrawp2bpwv6mnayw5s8ms8798x0mg03i0h68dhv5z8ds";
+    };
+    dependencies = [];
+  };
+  "vim_stylish_haskell" = buildVimPlugin {
+    name = "vim_stylish_haskell";
+    src = fetchgit {
+      url = "https://github.com/nbouscal/vim-stylish-haskell";
+      rev = "c664376ba814de3f87cb7641f90b2c6a9dd53671";
+      sha256 = "1xm5ark2mwphznv3xsyzgcldnr52i5jzk1pfqdh0080j07aama8j";
     };
     dependencies = [];
   };

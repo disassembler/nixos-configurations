@@ -9,8 +9,8 @@ in with lib; {
     environment.systemPackages = [ 
       nvim
       pkgs.ctags
-      pkgs.python
-      pkgs.python35Packages.neovim
+      #pkgs.python
+      #pkgs.python35Packages.neovim
     ];
   };
   
