@@ -113,7 +113,7 @@ tool = splice
   tool = splice
 
 [mergetool "splice"]
-  cmd = "nvim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
+  cmd = "vim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
   trustExitCode = true
 
 [apply]

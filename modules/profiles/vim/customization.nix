@@ -19,11 +19,12 @@ in
           "fugitive"
           "surround"
           "vim-markdown"
-          "multiple-cursors"
           "ale"
           "gitgutter"
           "vim-nix"
-          "youcompleteme"
+          "deoplete_nvim"
+          "deoplete-go"
+          "deoplete-rust"
           "repeat"
           "nerdtree"
           "UltiSnips"
@@ -44,6 +45,7 @@ in
           "vim_stylish_haskell"
           "haskell_vim"
           "tagbar"
+          "LanguageClient-neovim"
         ];
       }
     ];

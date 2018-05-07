@@ -80,7 +80,17 @@
         ];
       });
     })
+    
+    (self: super: let hie = import (super.fetchFromGitHub {
+      owner = "domenkozar";
+      repo = "hie-nix";
+      rev = "dbb89939da8997cc6d863705387ce7783d8b6958";
+      sha256 = "1bcw59zwf788wg686p3qmcq03fr7bvgbcaa83vq8gvg231bgid4m";
+    }) {};
+    in
+    { inherit (hie) hie82; })
   ];
+    
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = super: let self = super.pkgs; in {
@@ -102,6 +112,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    hie82
     sqliteInteractive
     manymans
     hlint

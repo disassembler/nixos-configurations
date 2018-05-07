@@ -13,7 +13,7 @@ let
 in with lib; {
   config = {
     environment.systemPackages = [ 
-      vim
+      nvim
       pkgs.ctags
       #pkgs.python
       #pkgs.python35Packages.neovim

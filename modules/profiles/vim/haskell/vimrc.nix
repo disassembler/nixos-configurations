@@ -4,6 +4,7 @@ let
     hothasktags = "${pkgs.haskellPackages.hothasktags}/bin/hothasktags";
     hasktags = "${pkgs.haskellPackages.hasktags}/bin/hasktags";
     fast-tags = "${pkgs.haskellPackages.fast-tags}/bin/fast-tags";
+    hie = "${pkgs.hie82}/bin/hie";
     mytags = hasktags;
     stylish-haskell = pkgs.haskellPackages.stylish-haskell.overrideAttrs (oldAttrs: rec {
       doCheck = false;
@@ -25,6 +26,11 @@ let
 in
 ''
 au BufWritePost *.hs            silent !${init-tags} %
+
+let g:deoplete#sources.haskell = ['LanguageClient']
+let g:LanguageClient_serverCommands = {
+    \ 'haskell': ['${hie}', '-d', '--lsp'],
+    \ }
 let g:stylish_haskell_command = '${stylish-haskell}/bin/stylish-haskell'
 let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : '${hasktags}',

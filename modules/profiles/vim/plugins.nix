@@ -121,4 +121,13 @@ in {
     };
     dependencies = [];
   };
+  "deoplete_nvim" = buildVimPlugin {
+    name = "deoplete_nvim";
+    src = fetchgit {
+      url = "https://github.com/Shougo/deoplete.nvim";
+      rev = "3fb71d7d71e769d29487e0ad47b4b0adefa2a58b";
+      sha256 = "1zcnd4n33ksava764ganv7sclq3v5hyl71fv513xjy7hadl3yrwc";
+    };
+    dependencies = [];
+  };
 }

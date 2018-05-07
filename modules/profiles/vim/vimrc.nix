@@ -2,14 +2,12 @@
 
 let
     generic = builtins.readFile ./vimrc/general.vim;
-    #plug = import ./vimrc/pluginconfigurations.nix;
+    plug = import ./vimrc/pluginconfigurations.nix;
     haskell = pkgs.callPackage haskell/vimrc.nix {};
 in
 
 ''
     ${generic}
+    ${plug}
     ${haskell}
-
-let g:ycm_server_keep_logfiles = 1
-let g:ycm_server_log_level = 'debug'
 ''

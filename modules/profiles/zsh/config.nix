@@ -82,8 +82,8 @@ let
       # -------------------------------------------------
 
       export PAGER='${less}/bin/less -R'
-      export EDITOR='vim'
-      export VISUAL='vim'
+      export EDITOR='nvim'
+      export VISUAL='nvim'
       export KEYTIMEOUT=1
       # SSH Completion
       zstyle ':completion:*:scp:*' tag-order \
@@ -100,7 +100,7 @@ let
       alias nixpaste="curl -F 'text=<-' http://nixpaste.lbr.uno"
       alias ssht="TERM=screen-256color ssh"
       alias nshell="nix-shell --run zsh"
-      alias vi="vim"
+      alias vi="nvim"
       # only init if installed.
       fasd_cache="$HOME/.fasd-init-bash"
       if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache" ]; then
