@@ -42,10 +42,11 @@ in
           "vim-hoogle"
           "vim-docbk-snippets"
           "markdown_wiki"
-          "vim_stylish_haskell"
+          #"vim_stylish_haskell"
           "haskell_vim"
           "tagbar"
           "LanguageClient-neovim"
+          "wakatime"
         ];
       }
     ];

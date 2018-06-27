@@ -39,48 +39,43 @@
     firewall = {
       enable = true;
       allowedUDPPorts = [ 53 4919 ];
-      allowedTCPPorts = [ 4444 8081 3478 3000 8080 ];
+      allowedTCPPorts = [ 4444 8081 3478 3000 8080 5900 ];
     };
-    bridges = {
-      cbr0.interfaces = [ ];
-    };
-    interfaces = {
-      cbr0 = {
-        ipv4.addresses = [
-          {
-            address = "10.38.0.1";
-            prefixLength = 24;
-          }
-        ];
-      };
-    };
+    #bridges = {
+    #  cbr0.interfaces = [ ];
+    #};
+    #interfaces = {
+    #  cbr0 = {
+    #    ipv4.addresses = [
+    #      {
+    #        address = "10.38.0.1";
+    #        prefixLength = 24;
+    #      }
+    #    ];
+    #  };
+    #};
   };
 
   security.pki.certificates = [ parameters.wedlake_ca_cert ];
 
-  nix = {
+  nix = let
+    buildMachines = import ./../build-machines.nix;
+  in {
     useSandbox = true;
     buildCores = 4;
+    sandboxPaths = [ "/etc/nsswitch.conf" "/etc/protocols" ];
     binaryCaches = [ "https://cache.nixos.org" "https://hydra.iohk.io" ];
     binaryCachePublicKeys = [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
+    distributedBuilds = true;
+    buildMachines = [
+      buildMachines.darwin.ohrid
+      buildMachines.darwin.macvm
+      #buildMachines.linux.optina
+    ];
     nixPath = [ "nixpkgs=/home/sam/nixpkgs/custom" "nixos-config=/etc/nixos/configuration.nix" ];
-    package = pkgs.nix';
   };
 
   nixpkgs.overlays = [
-    (self: super: {
-      nix' = super.nix.overrideAttrs ( drv: {
-        patches = [
-          (pkgs.fetchpatch {
-             url = "https://github.com/NixOS/nix/commit/a6c5955c8d59ca26745843f9779253a173876665.patch";
-             name = "nsswitch.patch";
-             sha256 = "1kk2j9bnv3c4ck6c79mwmq04q1qzzq8jvxsi2csyswh9pvxdf1hv";
-           })
-
-        ];
-      });
-    })
-    
     (self: super: let hie = import (super.fetchFromGitHub {
       owner = "domenkozar";
       repo = "hie-nix";
@@ -112,6 +107,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
+    psmisc
     hie82
     sqliteInteractive
     manymans
@@ -151,7 +147,7 @@
     openconnect_gnutls
     gnutls
     nix-prefetch-git
-    gitAndTools.gitflow
+    gitAndTools.gitFull
     tig
     python27Packages.gnutls
     unzip
@@ -161,7 +157,7 @@
     p7zip
     zip
     scrot
-    #remmina
+    remmina
     tdesktop
     keybase
     keybase-gui
@@ -172,6 +168,10 @@
     taskwarrior
     jq
     cabal2nix
+    nodePackages.eslint
+    nodejs
+    haskellPackages.ghcid
+    virtmanager
   ];
 
   hardware = {
@@ -336,7 +336,7 @@
     #extraOptions = "--insecure-registry 10.80.0.49:5000";
   };
   virtualisation.libvirtd.enable = true;
-  virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
   # Custom dotfiles for sam user
@@ -346,5 +346,6 @@
     text = "ln -sfn /etc/per-user/sam/gitconfig /home/sam/.gitconfig";
     deps = [];
   };
+  system.nixos.stateVersion = "17.09";
 
 }

@@ -130,4 +130,13 @@ in {
     };
     dependencies = [];
   };
+  "wakatime" = buildVimPlugin {
+    name = "wakatime";
+    src = fetchgit {
+      url = "https://github.com/disassembler/vim-wakatime";
+      rev = "eb0ba24a1683f871952d395d1537fc39e096d16a";
+      sha256 = "19ff3bwxkrb3ad52jknbwhjgyhg6gnap38qsll9qlb2zn040l073";
+    };
+    dependencies = [];
+  };
 }

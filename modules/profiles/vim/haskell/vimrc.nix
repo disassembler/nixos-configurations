@@ -2,7 +2,7 @@
 
 let
     hothasktags = "${pkgs.haskellPackages.hothasktags}/bin/hothasktags";
-    hasktags = "${pkgs.haskellPackages.hasktags}/bin/hasktags";
+    hasktags = "${pkgs.haskell.lib.justStaticExecutables pkgs.haskellPackages.hasktags}/bin/hasktags";
     fast-tags = "${pkgs.haskellPackages.fast-tags}/bin/fast-tags";
     hie = "${pkgs.hie82}/bin/hie";
     mytags = hasktags;
@@ -31,7 +31,7 @@ let g:deoplete#sources.haskell = ['LanguageClient']
 let g:LanguageClient_serverCommands = {
     \ 'haskell': ['${hie}', '-d', '--lsp'],
     \ }
-let g:stylish_haskell_command = '${stylish-haskell}/bin/stylish-haskell'
+" let g:stylish_haskell_command = ''${stylish-haskell}/bin/stylish-haskell'
 let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : '${hasktags}',
     \ 'ctagsargs' : '-x -c -o-',
