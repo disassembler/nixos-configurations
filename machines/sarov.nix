@@ -301,8 +301,8 @@
     dnsmasq = {
       enable = true;
       extraConfig = ''
-        address=/crate.wedlake.lan/2601:98a:4101:bff0:d63d:7eff:fe4d:c47f
-        server=/wedlake.lan/2601:98a:4101:bff0:d63d:7eff:fe4d:c47f
+        address=/portal.wedlake.lan/10.40.33.1
+        server=/wedlake.lan/10.40.33.1
       '';
       servers = [
         "8.8.4.4"
