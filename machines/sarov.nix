@@ -64,7 +64,7 @@
     useSandbox = true;
     buildCores = 4;
     sandboxPaths = [ "/etc/nsswitch.conf" "/etc/protocols" ];
-    binaryCaches = [ "https://cache.nixos.org" "https://hydra.iohk.io" ];
+    binaryCaches = [ "https://cache.nixos.org" "https://hydra.iohk.io" "ssh://nix-ssh@optina.wedlake.lan" ];
     binaryCachePublicKeys = [ "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" ];
     distributedBuilds = true;
     buildMachines = [
